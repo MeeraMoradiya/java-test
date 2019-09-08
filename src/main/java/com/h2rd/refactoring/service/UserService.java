@@ -33,10 +33,10 @@ public class UserService {
         }
     }
 
-    public void deleteUser(User userToDelete) {
+    public void deleteUser(String email) {
         try {
             for (User user : users) {
-                if (user.getName() == userToDelete.getName()) {
+                if (user.getEmail().equals(email)) {
                     users.remove(user);
                 }
             }

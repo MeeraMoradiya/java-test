@@ -1,6 +1,9 @@
 package com.h2rd.refactoring.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
+
+
+
 import java.util.List;
 
 @XmlRootElement
@@ -28,4 +31,8 @@ public class User {
     public void setRoles(List<String> roles) {
         this.roles = roles;
     }
+	@Override
+	public String toString() {
+		return "User [name=" + name + ", email=" + email + ", roles=" + roles + "]";
+	}
 }

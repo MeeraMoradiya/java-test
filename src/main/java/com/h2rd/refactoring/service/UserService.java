@@ -3,9 +3,12 @@ package com.h2rd.refactoring.service;
 import java.util.ArrayList;
 
 import com.h2rd.refactoring.model.User;
+import com.h2rd.refactoring.resource.DuplicateEmailException;
+import com.sun.jersey.api.NotFoundException;
 
 public class UserService {
 
+	private static final String CLASSNAME="UserService";
     public ArrayList<User> users;
 
     public static UserService userDao;
@@ -17,10 +20,36 @@ public class UserService {
         return userDao;
     }
 
-    public void saveUser(User user) {
+    public void saveUser(User user) throws DuplicateEmailException {
+    	
+    	String methodName="saveUser";
+    	if(user == null ) {
+    		System.err.println(CLASSNAME+ " " +methodName+" "+"User is Null" );
+    		throw new NotFoundException();
+    	}else if(user.getName() == null || user.getEmail().isEmpty()) {
+    		System.err.println(CLASSNAME+ " " +methodName+" "+"EmailId is Null or Empty" );
+    		throw new NotFoundException();
+    	}
+    	
         if (users == null) {
             users = new ArrayList<User>();
         }
+
+    	// To check if email already exists
+    	String email=user.getEmail();
+    	boolean duplicate= false;
+    	for (User us : users) {
+    		if(us.getEmail().equals(email)) {
+    			duplicate=true;
+    			break;
+    		}
+    	}
+    	
+    	if(duplicate==true) {
+    		System.err.println(CLASSNAME+ " " +methodName+" "+"User with given email already exists");
+    		throw new DuplicateEmailException();
+    	}
+        
         users.add(user);
     }
 

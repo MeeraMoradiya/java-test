@@ -32,8 +32,6 @@ public class UserResource {
 		}
 		try {
 			userService.saveUser(user);
-		} catch (NotFoundException e) {
-			return Response.status(Status.NOT_FOUND).build();
 		} catch (CustomException e) {
 			ErrorMessage errMsg = new ErrorMessage(e.getMessage(),404,"");
 			return Response.status(Status.NOT_FOUND).entity(errMsg).build();
@@ -71,6 +69,7 @@ public class UserResource {
 		if (userService == null) {
 			userService = UserService.getUserDao();
 		}
+		
 		try {
 			userService.deleteUser(email);
 			return Response.ok().entity(email).build();

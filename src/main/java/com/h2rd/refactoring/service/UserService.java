@@ -26,11 +26,11 @@ public class UserService {
     	
     	String methodName="saveUser";
     	if(user == null ) {
-    		System.err.println(CLASSNAME+ " " +methodName+" "+"User is Null" );
-    		throw new NotFoundException();
+    		throw new CustomException("User is Null");
     	}else if(user.getName() == null || user.getEmail().isEmpty()) {
-    		System.err.println(CLASSNAME+ " " +methodName+" "+"EmailId is Null or Empty" );
-    		throw new NotFoundException();
+    		throw new CustomException("EmailId is Null or Empty");
+    	}else if(user.getRoles() == null || user.getRoles().isEmpty()) {
+    		throw new CustomException("User must have atleast one role");
     	}
     	
         if (users == null) {
@@ -56,7 +56,7 @@ public class UserService {
         }
     }
 
-    public void deleteUser(String email) throws Exception  {
+    public void deleteUser(String email) throws Exception{
     	String methodName="deleteUser";
     	boolean exists=false;
         try {
@@ -83,6 +83,9 @@ public class UserService {
     public void updateUser(User userToUpdate) throws Exception{
     	String methodName="updateUser";
     	boolean exists=false;
+    	if(userToUpdate.getRoles() == null || userToUpdate.getRoles().isEmpty()) {
+    		throw new NotFoundException("User must have atleast one role");
+    	}
         try {
             for (User user : users) {
                 if (user.getEmail().equals(userToUpdate.getEmail())) {

@@ -98,7 +98,7 @@ public class UserService {
             	throw new CustomException("User with given email does not exist");
             }
         } catch (Exception e) {
-        	System.err.println(CLASSNAME+" "+methodName+" "+" Exception in delete user"+e);
+        	System.err.println(CLASSNAME+" "+methodName+" "+" Exception in update user"+e);
             throw e;
         }
     }

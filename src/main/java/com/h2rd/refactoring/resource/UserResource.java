@@ -84,11 +84,7 @@ public class UserResource {
 	@GET
 	public Response getUsers() {
 
-		/*
-		 * ApplicationContext context = new ClassPathXmlApplicationContext(new String[]
-		 * { "classpath:/application-config.xml" });
-		 */
-		// userService = context.getBean(UserService.class);
+		
 		if (userService == null) {
 			userService = UserService.getUserDao();
 		}
@@ -118,6 +114,9 @@ public class UserResource {
 
 		try {
 			User user = userService.findUser(name);
+			if(user == null) {
+				return Response.status(Status.NOT_FOUND).build();
+			}
 			return Response.ok().entity(user).build();
 		} catch (Exception e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();

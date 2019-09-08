@@ -35,11 +35,14 @@ public class UserService {
 
     public void deleteUser(String email) {
         try {
+        	int index=0;
             for (User user : users) {
                 if (user.getEmail().equals(email)) {
-                    users.remove(user);
+                    break;
                 }
+                index++;
             }
+            users.remove(index);
         } catch (Exception e) {
             e.printStackTrace();
         }

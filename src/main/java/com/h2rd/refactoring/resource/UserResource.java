@@ -1,7 +1,7 @@
-package com.h2rd.refactoring.web;
+package com.h2rd.refactoring.resource;
 
-import com.h2rd.refactoring.usermanagement.User;
-import com.h2rd.refactoring.usermanagement.UserDao;
+import com.h2rd.refactoring.model.User;
+import com.h2rd.refactoring.service.UserService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -18,7 +18,7 @@ import java.util.List;
 @Repository
 public class UserResource{
 
-    public UserDao userDao;
+    public UserService userDao;
 
     @GET
     @Path("add/")
@@ -32,7 +32,7 @@ public class UserResource{
         user.setRoles(roles);
 
         if (userDao == null) {
-            userDao = UserDao.getUserDao();
+            userDao = UserService.getUserDao();
         }
 
         userDao.saveUser(user);
@@ -51,7 +51,7 @@ public class UserResource{
         user.setRoles(roles);
 
         if (userDao == null) {
-            userDao = UserDao.getUserDao();
+            userDao = UserService.getUserDao();
         }
 
         userDao.updateUser(user);
@@ -69,7 +69,7 @@ public class UserResource{
         user.setRoles(roles);
 
         if (userDao == null) {
-            userDao = UserDao.getUserDao();
+            userDao = UserService.getUserDao();
         }
 
         userDao.deleteUser(user);
@@ -83,7 +83,7 @@ public class UserResource{
         ApplicationContext context = new ClassPathXmlApplicationContext(new String[] {
     		"classpath:/application-config.xml"	
     	});
-    	userDao = context.getBean(UserDao.class);
+    	userDao = context.getBean(UserService.class);
     	List<User> users = userDao.getUsers();
     	if (users == null) {
     		users = new ArrayList<User>();
@@ -98,7 +98,7 @@ public class UserResource{
     public Response findUser(@QueryParam("name") String name) {
 
         if (userDao == null) {
-            userDao = UserDao.getUserDao();
+            userDao = UserService.getUserDao();
         }
 
         User user = userDao.findUser(name);

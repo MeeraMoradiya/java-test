@@ -1,16 +1,18 @@
-package com.h2rd.refactoring.usermanagement;
+package com.h2rd.refactoring.service;
 
 import java.util.ArrayList;
 
-public class UserDao {
+import com.h2rd.refactoring.model.User;
+
+public class UserService {
 
     public ArrayList<User> users;
 
-    public static UserDao userDao;
+    public static UserService userDao;
 
-    public static UserDao getUserDao() {
+    public static UserService getUserDao() {
         if (userDao == null) {
-            userDao = new UserDao();
+            userDao = new UserService();
         }
         return userDao;
     }

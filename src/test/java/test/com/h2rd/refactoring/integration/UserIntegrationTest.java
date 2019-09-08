@@ -3,6 +3,7 @@ package test.com.h2rd.refactoring.integration;
 import java.util.ArrayList;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import junit.framework.Assert;
 
@@ -21,9 +22,13 @@ public class UserIntegrationTest {
         integration.setName("integration");
         integration.setEmail("initial@integration.com");
         integration.setRoles(new ArrayList<String>());
-        
-        Response response = userResource.addUser(integration.getName(), integration.getEmail(), integration.getRoles());
-        Assert.assertEquals(200, response.getStatus());
+        try {
+        Response response = userResource.addUser(integration);
+        Assert.assertEquals(201, response.getStatus());
+        }catch(Exception e) {
+        	
+        }
+       
 	}
 
 	@Test
@@ -37,7 +42,7 @@ public class UserIntegrationTest {
         updated.setEmail("updated@integration.com");
         updated.setRoles(new ArrayList<String>());
         
-        Response response = userResource.updateUser(updated.getName(), updated.getEmail(), updated.getRoles());
+        Response response = userResource.updateUser(updated.getEmail(),updated);
         Assert.assertEquals(200, response.getStatus());
 	}
 }

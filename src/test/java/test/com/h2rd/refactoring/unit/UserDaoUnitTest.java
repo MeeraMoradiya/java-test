@@ -32,7 +32,8 @@ public class UserDaoUnitTest {
 
         try {
             userDao.deleteUser("fake@email.com");
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
+        	e.printStackTrace();
         }
     }
 }

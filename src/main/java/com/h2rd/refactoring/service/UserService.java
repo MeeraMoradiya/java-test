@@ -3,8 +3,9 @@ package com.h2rd.refactoring.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.h2rd.refactoring.exception.CustomException;
+import com.h2rd.refactoring.exception.CustomExceptionMapper;
 import com.h2rd.refactoring.model.User;
-import com.h2rd.refactoring.resource.DuplicateEmailException;
 import com.sun.jersey.api.NotFoundException;
 
 public class UserService {
@@ -21,7 +22,7 @@ public class UserService {
         return userDao;
     }
 
-    public void saveUser(User user) throws DuplicateEmailException {
+    public void saveUser(User user) {
     	
     	String methodName="saveUser";
     	if(user == null ) {
@@ -39,7 +40,7 @@ public class UserService {
     	
     	if(duplicate==true) {
     		System.err.println(CLASSNAME+ " " +methodName+" "+"User with given email already exists");
-    		throw new DuplicateEmailException();
+    		throw new CustomException("User with given email already exists"+user.getEmail());
     	}
         
         users.add(user);
@@ -57,15 +58,22 @@ public class UserService {
 
     public void deleteUser(String email) throws Exception  {
     	String methodName="deleteUser";
+    	boolean exists=false;
         try {
         	int index=0;
             for (User user : users) {
                 if (user.getEmail().equals(email)) {
+                	exists=true;
                     break;
                 }
                 index++;
             }
-            users.remove(index);
+            if(exists) {
+            	users.remove(index);
+            }else {
+            	throw new CustomException("User with given email does not exist");
+            }
+            
         } catch (Exception e) {
         	 System.err.println(CLASSNAME+" "+methodName+" "+" Exception in delete user"+e);
              throw e;
@@ -74,12 +82,17 @@ public class UserService {
 
     public void updateUser(User userToUpdate) throws Exception{
     	String methodName="updateUser";
+    	boolean exists=false;
         try {
             for (User user : users) {
                 if (user.getEmail().equals(userToUpdate.getEmail())) {
                     user.setName(userToUpdate.getEmail());
                     user.setRoles(userToUpdate.getRoles());
+                    exists=true;
                 }
+            }
+            if(!exists) {
+            	throw new CustomException("User with given email does not exist");
             }
         } catch (Exception e) {
         	System.err.println(CLASSNAME+" "+methodName+" "+" Exception in delete user"+e);

@@ -1,11 +1,15 @@
 package com.h2rd.refactoring.resource;
 
+import com.h2rd.refactoring.exception.CustomException;
+import com.h2rd.refactoring.exception.CustomExceptionMapper;
+import com.h2rd.refactoring.model.ErrorMessage;
 import com.h2rd.refactoring.model.User;
 import com.h2rd.refactoring.service.UserService;
 import com.sun.jersey.api.NotFoundException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -21,7 +25,7 @@ public class UserResource {
 	public UserService userService;
 
 	@POST
-	public Response addUser(User user) throws DuplicateEmailException {
+	public Response addUser(User user) {
 
 		if (userService == null) {
 			userService = UserService.getUserDao();
@@ -30,8 +34,9 @@ public class UserResource {
 			userService.saveUser(user);
 		} catch (NotFoundException e) {
 			return Response.status(Status.NOT_FOUND).build();
-		} catch (DuplicateEmailException e) {
-			throw e;
+		} catch (CustomException e) {
+			ErrorMessage errMsg = new ErrorMessage(e.getMessage(),404,"");
+			return Response.status(Status.NOT_FOUND).entity(errMsg).build();
 		} catch (Exception e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
@@ -51,7 +56,10 @@ public class UserResource {
 		try {
 			userService.updateUser(user);
 			return Response.status(Status.OK).entity(user).build();
-		} catch (Exception e) {
+		} catch(CustomException e) {
+			ErrorMessage errMsg = new ErrorMessage(e.getMessage(),404,"");
+			return Response.status(Status.NOT_FOUND).entity(errMsg).build();
+		}catch (Exception e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}
@@ -66,7 +74,10 @@ public class UserResource {
 		try {
 			userService.deleteUser(email);
 			return Response.ok().entity(email).build();
-		} catch (Exception e) {
+		}catch(CustomException e) {
+			ErrorMessage errMsg = new ErrorMessage(e.getMessage(),404,"");
+			return Response.status(Status.NOT_FOUND).entity(errMsg).build();
+		}catch (Exception e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}

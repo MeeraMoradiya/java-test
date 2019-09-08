@@ -34,16 +34,7 @@ public class UserService {
         if (users == null) {
             users = new ArrayList<User>();
         }
-
-    	// To check if email already exists
-    	String email=user.getEmail();
-    	boolean duplicate= false;
-    	for (User us : users) {
-    		if(us.getEmail().equals(email)) {
-    			duplicate=true;
-    			break;
-    		}
-    	}
+    	boolean duplicate= isDuplicateEmail(user.getEmail());
     	
     	if(duplicate==true) {
     		System.err.println(CLASSNAME+ " " +methodName+" "+"User with given email already exists");
@@ -80,8 +71,8 @@ public class UserService {
     public void updateUser(User userToUpdate) {
         try {
             for (User user : users) {
-                if (user.getName() == userToUpdate.getName()) {
-                    user.setEmail(userToUpdate.getEmail());
+                if (user.getEmail().equals(userToUpdate.getEmail())) {
+                    user.setName(userToUpdate.getEmail());
                     user.setRoles(userToUpdate.getRoles());
                 }
             }
@@ -101,5 +92,15 @@ public class UserService {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    public boolean isDuplicateEmail(String email) {
+    	for (User us : users) {
+    		if(us.getEmail().equals(email)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    	
     }
 }

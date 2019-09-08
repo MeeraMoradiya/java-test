@@ -1,6 +1,7 @@
 package com.h2rd.refactoring.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.h2rd.refactoring.model.User;
 import com.h2rd.refactoring.resource.DuplicateEmailException;
@@ -9,7 +10,7 @@ import com.sun.jersey.api.NotFoundException;
 public class UserService {
 
 	private static final String CLASSNAME="UserService";
-    public ArrayList<User> users;
+    public List<User> users;
 
     public static UserService userDao;
 
@@ -44,16 +45,18 @@ public class UserService {
         users.add(user);
     }
 
-    public ArrayList<User> getUsers() {
+    public List<User> getUsers() {
+    	String methodName="getUsers";
         try {
             return users;
-        } catch (Throwable e) {
-            System.out.println("error");
-            return null;
+        } catch (Exception e) {
+            System.err.println(CLASSNAME+" "+methodName+" "+" Exception in getting users"+e);
+            throw new NotFoundException();
         }
     }
 
-    public void deleteUser(String email) {
+    public void deleteUser(String email) throws Exception  {
+    	String methodName="deleteUser";
         try {
         	int index=0;
             for (User user : users) {
@@ -64,11 +67,13 @@ public class UserService {
             }
             users.remove(index);
         } catch (Exception e) {
-            e.printStackTrace();
+        	 System.err.println(CLASSNAME+" "+methodName+" "+" Exception in delete user"+e);
+             throw e;
         }
     }
 
-    public void updateUser(User userToUpdate) {
+    public void updateUser(User userToUpdate) throws Exception{
+    	String methodName="updateUser";
         try {
             for (User user : users) {
                 if (user.getEmail().equals(userToUpdate.getEmail())) {
@@ -76,20 +81,24 @@ public class UserService {
                     user.setRoles(userToUpdate.getRoles());
                 }
             }
-        } catch (RuntimeException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+        	System.err.println(CLASSNAME+" "+methodName+" "+" Exception in delete user"+e);
+            throw e;
         }
     }
 
-    public User findUser(String name) {
+    public User findUser(String name) throws Exception{
+    	
+    	String methodName="findUser";
         try {
             for (User user : users) {
                 if (user.getName() == name) {
                     return user;
                 }
             }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+        	System.err.println(CLASSNAME+" "+methodName+" "+" Exception in delete user"+e);
+            throw e;
         }
         return null;
     }

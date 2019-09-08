@@ -16,87 +16,101 @@ import java.util.List;
 
 @Path("/users")
 @Repository
-public class UserResource{
+public class UserResource {
 
-    public UserService userService;
+	public UserService userService;
 
-    @POST
-    public Response addUser(User user) throws DuplicateEmailException {
+	@POST
+	public Response addUser(User user) throws DuplicateEmailException {
 
-        if (userService == null) {
-            userService = UserService.getUserDao();
-        }
-        try {
-        	userService.saveUser(user);
-        }catch(NotFoundException e) {
-        	return Response.status(Status.NOT_FOUND).build();
-        }catch(DuplicateEmailException e) {
-        	throw e;
-        }catch(Exception e) {
-        	return Response.status(Status.INTERNAL_SERVER_ERROR).build();
-        }
-     
-		return Response.status(Status.CREATED)
-				.entity(user)
-				.build();
-    }
+		if (userService == null) {
+			userService = UserService.getUserDao();
+		}
+		try {
+			userService.saveUser(user);
+		} catch (NotFoundException e) {
+			return Response.status(Status.NOT_FOUND).build();
+		} catch (DuplicateEmailException e) {
+			throw e;
+		} catch (Exception e) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		}
 
-    @PUT
-    @Path("/{email}")
-    public Response updateUser(@PathParam("email") String email, User user) {
+		return Response.status(Status.CREATED).entity(user).build();
+	}
 
-       user.setEmail(email);
+	@PUT
+	@Path("/{email}")
+	public Response updateUser(@PathParam("email") String email, User user) {
 
-        if (userService == null) {
-            userService = UserService.getUserDao();
-        }
+		user.setEmail(email);
 
-        userService.updateUser(user);
-        return Response.status(Status.OK)
-        		.entity(user)
-        		.build();
-    }
+		if (userService == null) {
+			userService = UserService.getUserDao();
+		}
+		try {
+			userService.updateUser(user);
+			return Response.status(Status.OK).entity(user).build();
+		} catch (Exception e) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
 
-    @DELETE
-    @Path("/{email}")
-    public Response deleteUser(@PathParam("email") String email) {
-       
-        if (userService == null) {
-            userService = UserService.getUserDao();
-        }
+	@DELETE
+	@Path("/{email}")
+	public Response deleteUser(@PathParam("email") String email) {
 
-        userService.deleteUser(email);
-        return Response.ok().entity(email).build();
-    }
+		if (userService == null) {
+			userService = UserService.getUserDao();
+		}
+		try {
+			userService.deleteUser(email);
+			return Response.ok().entity(email).build();
+		} catch (Exception e) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
 
-    @GET
-    public Response getUsers() {
-    	
-       /* ApplicationContext context = new ClassPathXmlApplicationContext(new String[] {
-    		"classpath:/application-config.xml"	
-    	});*/
-    	//userService = context.getBean(UserService.class);
-    	if (userService == null) {
-            userService = UserService.getUserDao();
-        }
-    	List<User> users = userService.getUsers();
-    	if (users == null) {
-    		users = new ArrayList<User>();
-    	}
-    	
-         GenericEntity<List<User>> usersEntity = new GenericEntity<List<User>>(users) {};
-        return Response.status(200).entity(usersEntity).build();
-    }
+	@GET
+	public Response getUsers() {
 
-    @GET
-    @Path("/{name}")
-    public Response findUser(@PathParam("name") String name) {
+		/*
+		 * ApplicationContext context = new ClassPathXmlApplicationContext(new String[]
+		 * { "classpath:/application-config.xml" });
+		 */
+		// userService = context.getBean(UserService.class);
+		if (userService == null) {
+			userService = UserService.getUserDao();
+		}
+		try {
+			List<User> users = userService.getUsers();
+			if (users == null) {
+				users = new ArrayList<User>();
+			}
 
-        if (userService == null) {
-            userService = UserService.getUserDao();
-        }
+			GenericEntity<List<User>> usersEntity = new GenericEntity<List<User>>(users) {
+			};
+			return Response.status(200).entity(usersEntity).build();
+		} catch (NotFoundException e) {
+			return Response.status(Status.NOT_FOUND).build();
+		} catch (Exception e) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
 
-        User user = userService.findUser(name);
-        return Response.ok().entity(user).build();
-    }
+	@GET
+	@Path("/{name}")
+	public Response findUser(@PathParam("name") String name) {
+
+		if (userService == null) {
+			userService = UserService.getUserDao();
+		}
+
+		try {
+			User user = userService.findUser(name);
+			return Response.ok().entity(user).build();
+		} catch (Exception e) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
 }

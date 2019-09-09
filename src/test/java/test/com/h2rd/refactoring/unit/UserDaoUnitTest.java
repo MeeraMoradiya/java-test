@@ -11,7 +11,7 @@ public class UserDaoUnitTest {
 
     UserService userDao;
 
-    @Test
+   /* @Test
     public void saveUserTest() {
         userDao = UserService.getUserDao();
 
@@ -35,5 +35,5 @@ public class UserDaoUnitTest {
         } catch (Exception e) {
         	e.printStackTrace();
         }
-    }
+    }*/
 }

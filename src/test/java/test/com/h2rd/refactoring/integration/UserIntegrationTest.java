@@ -1,6 +1,7 @@
 package test.com.h2rd.refactoring.integration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -14,14 +15,14 @@ import com.h2rd.refactoring.resource.UserResource;
 
 public class UserIntegrationTest {
 	
-	/*@Test
+	@Test
 	public void createUserTest() {
 		UserResource userResource = new UserResource();
 		
 		User integration = new User();
         integration.setName("integration");
         integration.setEmail("initial@integration.com");
-        integration.setRoles(new ArrayList<String>());
+        integration.setRoles(Arrays.asList("admin"));
         try {
         Response response = userResource.addUser(integration);
         Assert.assertEquals(201, response.getStatus());
@@ -35,14 +36,14 @@ public class UserIntegrationTest {
 	public void updateUserTest() {
 		UserResource userResource = new UserResource();
 		
-		createUserTest();
+		//createUserTest();
         
         User updated = new User();
         updated.setName("integration");
-        updated.setEmail("updated@integration.com");
-        updated.setRoles(new ArrayList<String>());
+        updated.setEmail("initial@integration.com");
+        updated.setRoles(Arrays.asList("user"));
         
         Response response = userResource.updateUser(updated.getEmail(),updated);
         Assert.assertEquals(200, response.getStatus());
-	}*/
+	}
 }

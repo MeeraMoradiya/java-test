@@ -71,7 +71,7 @@ public class UserResource {
 			return Response.status(Status.OK).entity(user).build();
 		} catch (CustomException e) {
 			ErrorMessage errMsg = new ErrorMessage(e.getMessage(), 404, "");
-			return Response.status(Status.NOT_FOUND).entity(errMsg).build();
+			return Response.status(Status.NOT_MODIFIED).entity(errMsg).build();
 		} catch (Exception e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
@@ -153,7 +153,7 @@ public class UserResource {
 			}
 			GenericEntity<List<User>> usersEntity = new GenericEntity<List<User>>(user) {
 			};
-			return Response.status(200).entity(usersEntity).build();
+			return Response.status(Status.OK).entity(usersEntity).build();
 		} catch (Exception e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}

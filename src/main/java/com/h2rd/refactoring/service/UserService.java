@@ -113,9 +113,9 @@ public class UserService {
 		String methodName = "updateUser";
 		boolean exists = false;
 		if (userToUpdate.getRoles() == null || userToUpdate.getRoles().isEmpty()) {
-			throw new NotFoundException("User must have atleast one role");
+			throw new CustomException("User must have atleast one role");
 		}
-		try {
+		
 			for (User user : users) {
 				if (user.getEmail().equals(userToUpdate.getEmail())) {
 					user.setName(userToUpdate.getEmail());
@@ -126,10 +126,7 @@ public class UserService {
 			if (!exists) {
 				throw new CustomException("User with given email does not exist");
 			}
-		} catch (Exception e) {
-			System.err.println(CLASSNAME + " " + methodName + " " + " Exception in update user" + e);
-			throw e;
-		}
+		
 	}
 
 	/**

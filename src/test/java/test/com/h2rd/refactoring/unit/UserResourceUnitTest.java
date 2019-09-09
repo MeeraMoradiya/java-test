@@ -48,7 +48,7 @@ public class UserResourceUnitTest {
         User user = new User();
 
         user.setName("Meera");
-        user.setEmail("meera1@sap.com");
+        user.setEmail("newUser@sap.com");
         user.setRoles(Arrays.asList("admin", "user"));
 
         Response response=userResource.addUser(user);
@@ -94,11 +94,18 @@ public class UserResourceUnitTest {
     public void updateUser() {
     	User user = new User();
 
-        user.setName("updated");
+        user.setName("old");
         user.setEmail("meera1@sap.com");
         user.setRoles(Arrays.asList("owner"));
+        
+        Response res=userResource.addUser(user);
+        User userNew = new User();
 
-        Response response=userResource.updateUser(user.getEmail(), user);
+        userNew.setName("new");
+        userNew.setEmail("meera1@sap.com");
+        userNew.setRoles(Arrays.asList("user"));
+
+        Response response=userResource.updateUser(userNew.getEmail(), userNew);
  
         Assert.assertEquals(200, response.getStatus());
     }
@@ -110,11 +117,19 @@ public class UserResourceUnitTest {
     public void updateUserWithWrongEmail() {
     	User user = new User();
 
-        user.setName("updated");
-        user.setEmail("aaa@sap.com");
+        user.setName("old");
+        user.setEmail("meera1@sap.com");
         user.setRoles(Arrays.asList("owner"));
+        
+        Response res=userResource.addUser(user);
+        User userNew = new User();
 
-        Response response=userResource.updateUser(user.getEmail(), user);
+        userNew.setName("new");
+        userNew.setEmail("aaabbb@sap.com");
+        userNew.setRoles(Arrays.asList("user"));
+
+        Response response=userResource.updateUser(userNew.getEmail(), userNew);
+       
  
         Assert.assertEquals(304, response.getStatus());
     }
@@ -126,11 +141,18 @@ public class UserResourceUnitTest {
     public void updateUserWithoutRole() {
     	User user = new User();
 
-        user.setName("updated");
-        user.setEmail("meera1@sap.com");
-        user.setRoles(new ArrayList<String>());
+        user.setName("old");
+        user.setEmail("olduser@sap.com");
+        user.setRoles(Arrays.asList("owner"));
+        
+        Response res=userResource.addUser(user);
+        User userNew = new User();
 
-        Response response=userResource.updateUser(user.getEmail(), user);
+        userNew.setName("new");
+        userNew.setEmail("olduser@sap.com");
+        userNew.setRoles(new ArrayList<String>());
+
+        Response response=userResource.updateUser(userNew.getEmail(), userNew);
  
         Assert.assertEquals(304, response.getStatus());
     }
@@ -143,8 +165,15 @@ public class UserResourceUnitTest {
      */
     @Test
     public void findUser() {
+    	User user = new User();
+
+        user.setName("test");
+        user.setEmail("findmeera@sap.com");
+        user.setRoles(Arrays.asList("owner"));
+        
+        Response res=userResource.addUser(user);
     	
-    	String name="updated";
+    	String name="test";
 
         Response response=userResource.findUser(name);
  
@@ -157,7 +186,13 @@ public class UserResourceUnitTest {
      */
     @Test
     public void findUserInvalidName() {
-    	
+    	User user = new User();
+
+        user.setName("test");
+        user.setEmail("findmeera@sap.com");
+        user.setRoles(Arrays.asList("owner"));
+        
+        Response res=userResource.addUser(user);
     	String name="invalid";
 
         Response response=userResource.findUser(name);

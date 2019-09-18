@@ -1,14 +1,17 @@
-package com.h2rd.refactoring.usermanagement;
+package com.h2rd.refactoring.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
+
+
+
 import java.util.List;
 
 @XmlRootElement
 public class User {
 
-    String name;
-    String email;
-    List<String> roles;
+    private String name;
+    private String email;
+    private List<String> roles;
 
     public String getName() {
         return name;
@@ -28,4 +31,8 @@ public class User {
     public void setRoles(List<String> roles) {
         this.roles = roles;
     }
+	@Override
+	public String toString() {
+		return "User [name=" + name + ", email=" + email + ", roles=" + roles + "]";
+	}
 }
